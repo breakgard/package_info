@@ -11,3 +11,12 @@ RUN wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add 
     echo "deb https://artifacts.elastic.co/packages/oss-7.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-7.x.list \
     apt-get update \
     apt-get install elasticsearch-oss=7.10.1
+
+# Initialize python venv
+    
+
+# Initialize elasticsearch
+RUN curl -XPUT localhost:9200/package_info -H 'Content-Type: application/json' -d '{"mappings":{ "properties": {"author": {"type": "text"}, "author_email": {"type": "keyword"}, "description": {"type": "text"}, "keywords": {"type": "keyword"}, "version": {"type": "keyword"}, "maintainer": {"type": "text"}, "maintainer_email":{"type": "keyword"}, "name": {"type": "keyword"}}}}' 
+
+# Initialize mongodb
+
