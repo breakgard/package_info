@@ -40,24 +40,24 @@ class PackageInfoManager():
       try:
         obj = PackageInfo.objects.get(package_id=package_info['_id'])
         obj.package_id = package_info['_id']
-        obj.author=repo_info['author'],
-        obj.author_email=repo_info['author_email'],
-        obj.description=repo_info['description'],
-        obj.keywords=repo_info['keywords'],
-        obj.version=repo_info['version'],
-        obj.maintainer=repo_info['maintainer'],
-        obj.maintainer_email=repo_info['maintainer_email'],
-        obj.name=repo_info['name']
+        obj.author=str(repo_info['author']),
+        obj.author_email=str(repo_info['author_email']),
+        obj.description=str(repo_info['description']),
+        obj.keywords=str(repo_info['keywords']),
+        obj.version=str(repo_info['version']),
+        obj.maintainer=str(repo_info['maintainer']),
+        obj.maintainer_email=str(repo_info['maintainer_email']),
+        obj.name=str(repo_info['name'])
         obj.save()
       except ObjectDoesNotExist:
         PackageInfo(
-                    package_id=package_info['_id'],
-                    author=repo_info['author'],
-                    author_email=repo_info['author_email'],
-                    description=repo_info['description'],
-                    keywords=repo_info['keywords'],
-                    version=repo_info['version'],
-                    maintainer=repo_info['maintainer'],
-                    maintainer_email=repo_info['maintainer_email'],
-                    name=repo_info['name']
+                    package_id=str(package_info['_id']),
+                    author=str(repo_info['author']),
+                    author_email=str(repo_info['author_email']),
+                    description=str(repo_info['description']),
+                    keywords=str(repo_info['keywords']),
+                    version=str(repo_info['version']),
+                    maintainer=str(repo_info['maintainer']),
+                    maintainer_email=str(repo_info['maintainer_email']),
+                    name=str(repo_info['name'])
         ).save()
