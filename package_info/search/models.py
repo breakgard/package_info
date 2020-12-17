@@ -2,12 +2,12 @@ from django.db import models
 
 # Create your models here.
 class PackageInfo(models.Model):
-    package_id = models.CharField(db_index=True)
-    name = models.CharField()
-    author = models.CharField()
-    author_email = models.CharField()
+    package_id = models.CharField(db_index=True, max_length=255)
+    name = models.CharField(max_length=255)
+    author = models.CharField(max_length=255)
+    author_email = models.CharField(max_length=255)
     description = models.TextField()
-    keywords = models.CharField()
-    version = models.CharField()
-    maintainer = models.CharField()
-    maintainer_email = models.CharField()
+    keywords = models.CharField(max_length=255)
+    version = models.CharField(max_length=255)
+    maintainer = models.CharField(max_length=255)
+    maintainer_email = models.CharField(max_length=255)

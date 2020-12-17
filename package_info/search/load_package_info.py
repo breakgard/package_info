@@ -39,12 +39,19 @@ class PackageInfoManager():
       repo_info = package_info['repo_info']['info']
       try:
         obj = PackageInfo.objects.get(package_id=package_info['_id'])
-        for key in obj:
-          obj[key] = repo_info[key]
+        obj.package_id = package_info['_id']
+        obj.author=repo_info['author'],
+        obj.author_email=repo_info['author_email'],
+        obj.description=repo_info['description'],
+        obj.keywords=repo_info['keywords'],
+        obj.version=repo_info['version'],
+        obj.maintainer=repo_info['maintainer'],
+        obj.maintainer_email=repo_info['maintainer_email'],
+        obj.name=repo_info['name']
         obj.save()
       except ObjectDoesNotExist:
         PackageInfo(
-                    package_id=package['_id'],
+                    package_id=package_info['_id'],
                     author=repo_info['author'],
                     author_email=repo_info['author_email'],
                     description=repo_info['description'],
@@ -53,4 +60,4 @@ class PackageInfoManager():
                     maintainer=repo_info['maintainer'],
                     maintainer_email=repo_info['maintainer_email'],
                     name=repo_info['name']
-        ).save)()
+        ).save()

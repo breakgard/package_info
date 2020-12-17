@@ -30,12 +30,13 @@ ALLOWED_HOSTS = []
 
 ELASTICSEARCH_DSL = {
     'default': {
-        'hosts': 'elasticsearch:9200'
+        'hosts': 'localhost:9200'
     },
 }
 # Application definition
 
 INSTALLED_APPS = [
+    'search.apps.SearchConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,7 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_elasticsearch_dsl',
-    'django-celery-beat'
+#    'django-celery-beat'
 ]
 
 MIDDLEWARE = [
