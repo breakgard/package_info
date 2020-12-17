@@ -1,0 +1,15 @@
+<div>
+ <div>
+ <p>PyPi package info search</p>
+ </div>
+ <div>
+   <form action="result/" method="post">
+       {% csrf_token %}
+       {{ form }}
+       <input type="submit" value="Submit">
+   </form>
+ </div>
+ <div>
+ <p>You know, for Search!</p>
+ </div>
+</div>

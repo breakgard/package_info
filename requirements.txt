@@ -1,5 +1,5 @@
 feedparser==6.0.2
 requests==2.25.1
-pymongo==3.11.2
-elasticsearch==7.10.1
 django==3.1.4
+django-elasticsearch-dsl==7.1.4
+django-celery-beat==2.1.0

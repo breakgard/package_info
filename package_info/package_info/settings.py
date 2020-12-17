@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,7 +28,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'elasticsearch:9200'
+    },
+}
 # Application definition
 
 INSTALLED_APPS = [
@@ -37,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_elasticsearch_dsl',
+    'django-celery-beat'
 ]
 
 MIDDLEWARE = [
@@ -54,7 +61,7 @@ ROOT_URLCONF = 'package_info.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['search/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -118,3 +125,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+#Search app config
+SEARCH_PACKAGE_FEED_URL='https://pypi.org/rss/packages.xml'
+SEARCH_PACKAGE_INFO_REPO_URL='https://pypi.org/pypi'
+SEARCH_PACKAGE_INFO_FETCH_TIMEOUT=10
+SEARCH_PAGINATION_SIZE=os.environ['SEARCH_PAGINATION_SIZE'] if 'SEARCH_PAGINATION_SIZE' in os.environ else 20
+SEARCH_ELASTICSEARCH_INDEX_NAME='package_info'
