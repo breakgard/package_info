@@ -1,0 +1,20 @@
+[DEFAULT]
+feed_url=https://pypi.org/rss/packages.xml
+package_info_repo_url=https://pypi.org/pypi/
+connection_timeout=10
+
+[db]
+#MongoDB support only
+host=localhost
+port=27017
+db_name=package_info
+col_name=package_info
+auth=True
+user_name=admin
+user_pass=admin
+
+[full_text_search]
+#Elasticsearch support only
+host=localhost
+port=9200
+index_name=package_info
