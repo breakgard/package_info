@@ -54,11 +54,19 @@ class PackageInfoManager():
 
 class SearchManager():
 
-  def __init__(self, query):
+  def __init__(self, query=None, page=1):
     self.query = query
+    self.page = page
+
+  def __get_queryset(self, q):
+    search_query = PackageInfoDocument.search().params(size=settings.SEARCH_MAX_DOCUMENTS_RETURNED).query(q)
+    queryset = search_query.to_queryset()
+    return queryset
+
+  def get_all(self):
+    q = Q("match_all")
+    return self.__get_queryset(q)
 
   def search(self):
     q = Q("multi_match", query=self.query, fields=INDEXED_FIELDS)
-    search_query = PackageInfoDocument.search().query(q)
-    queryset = search_query.to_queryset()
-    return queryset
+    return self.__get_queryset(q)

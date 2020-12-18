@@ -18,14 +18,22 @@ def index(request):
 
 def result(request):
   if "query" in request.GET:
-    manager = SearchManager(request.GET['query'])
     page = request.GET.get('page', 1)
+    manager = SearchManager(request.GET['query'], page=page)
     qs = manager.search()
     table = PackageInfoTable(qs)
     RequestConfig(request, paginate={"per_page": settings.SEARCH_PAGINATION_SIZE}).configure(table)
     return render(request, 'result.html', {"result_table": table})
   else:
     return HttpResponse("You need to include query! Go to /search and send the request from there.")
+
+def get_max(request):
+  page = request.GET.get('page', 1)
+  manager = SearchManager(page=page)
+  qs = manager.get_all()
+  table = PackageInfoTable(qs)
+  RequestConfig(request, paginate={"per_page": settings.SEARCH_PAGINATION_SIZE}).configure(table)
+  return render(request, 'result.html', {"result_table": table})
 
 def load_packages(request):
   manager = PackageInfoManager()

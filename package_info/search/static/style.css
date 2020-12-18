@@ -25,3 +25,16 @@ tr {
   width: 50%;
   padding: 10px;
 }
+
+.search-title {
+  text-align: center;
+}
+
+.search-form {
+  margin: auto;
+  width: 50%;
+}
+
+.search-footer {
+  text-align: center
+}

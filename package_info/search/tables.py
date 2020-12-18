@@ -14,7 +14,7 @@ class PackageInfoTable(tables.Table):
     class Meta:
         model = PackageInfo
         orderable = True
-        exclude = ('description_content_type',)
+        exclude = ('description_content_type','id',)
     def render_package_id(self, value):
       return mark_safe(f'<a href="{value}">{value}</a>')
 
