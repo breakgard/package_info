@@ -1,5 +1,7 @@
 from django.db import models
 
+INDEXED_FIELDS = ['author', 'author_email', 'description', 'keywords', 'version', 'maintainer', 'maintainer_email', 'name']
+
 # Create your models here.
 class PackageInfo(models.Model):
     package_id = models.CharField(db_index=True, max_length=255)

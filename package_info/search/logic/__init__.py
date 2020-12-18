@@ -2,10 +2,13 @@ import requests
 import feedparser
 import re
 import logging
-
-from .models import PackageInfo
+from elasticsearch_dsl import Q
 from django.conf import settings
+
+from search.models import PackageInfo, INDEXED_FIELDS
+from search.documents import PackageInfoDocument
 from django.core.exceptions import ObjectDoesNotExist
+
 class PackageInfoManager():
 
   def __init__(self):
@@ -37,27 +40,29 @@ class PackageInfoManager():
   def save_package_info(self):
     for package_info in self.packages_info:
       repo_info = package_info['repo_info']['info']
+      obj = None
       try:
         obj = PackageInfo.objects.get(package_id=package_info['_id'])
-        obj.package_id = package_info['_id']
-        obj.author=str(repo_info['author']),
-        obj.author_email=str(repo_info['author_email']),
-        obj.description=str(repo_info['description']),
-        obj.keywords=str(repo_info['keywords']),
-        obj.version=str(repo_info['version']),
-        obj.maintainer=str(repo_info['maintainer']),
-        obj.maintainer_email=str(repo_info['maintainer_email']),
-        obj.name=str(repo_info['name'])
-        obj.save()
+        obj.package_id = str(package_info['_id'])
       except ObjectDoesNotExist:
-        PackageInfo(
-                    package_id=str(package_info['_id']),
-                    author=str(repo_info['author']),
-                    author_email=str(repo_info['author_email']),
-                    description=str(repo_info['description']),
-                    keywords=str(repo_info['keywords']),
-                    version=str(repo_info['version']),
-                    maintainer=str(repo_info['maintainer']),
-                    maintainer_email=str(repo_info['maintainer_email']),
-                    name=str(repo_info['name'])
-        ).save()
+        obj = PackageInfo(package_id=str(package_info['_id']))
+      for field in INDEXED_FIELDS:
+        setattr(obj, field, str(repo_info[field]))
+      obj.save()
+
+
+class SearchManager():
+
+  def __init__(self, query, sort, page):
+    self.query = query
+    self.sort = sort
+    self.page = page
+
+  def search(self):
+    q = Q("multi_match", query=self.query, fields=INDEXED_FIELDS)
+    search_query = PackageInfoDocument.search().query(q)
+    if self.sort is not None:
+      search_query.sort(self.sort)
+    search_query = search_query[(self.page-1)*settings.SEARCH_PAGINATION_SIZE:self.page*settings.SEARCH_PAGINATION_SIZE]
+    queryset = search_query.to_queryset()
+    return queryset

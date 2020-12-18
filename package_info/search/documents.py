@@ -3,12 +3,12 @@
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
 from django.conf import settings
-from .models import PackageInfo
+from .models import PackageInfo, INDEXED_FIELDS
 
 
 @registry.register_document
 class PackageInfoDocument(Document):
-    
+
     class Index:
         # Name of the Elasticsearch index
         name =  settings.SEARCH_ELASTICSEARCH_INDEX_NAME
@@ -20,16 +20,7 @@ class PackageInfoDocument(Document):
         model = PackageInfo # The model associated with this Document
 
         # The fields of the model you want to be indexed in Elasticsearch
-        fields = [
-              'author',
-              'author_email',
-              'description',
-              'keywords',
-              'version',
-              'maintainer',
-              'maintainer_email',
-              'name'
-        ]
+        fields = INDEXED_FIELDS
 
         # Ignore auto updating of Elasticsearch when a model is saved
         # or deleted:
