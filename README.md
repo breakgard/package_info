@@ -5,6 +5,10 @@ It checks the PyPi rss feed daily for new updates, downloads information regardi
 
 ##Usage
 
-Either build docker image within enclosed dockerfile for standalone installation.
+The application is designed to run in a standalone docker container.
+You can also run the app without docker if needed.
 
-##Prerequisites
+### Running in docker
+
+
+### Running standalone

@@ -30,7 +30,7 @@ ALLOWED_HOSTS = []
 
 ELASTICSEARCH_DSL = {
     'default': {
-        'hosts': 'localhost:9200'
+        'hosts': os.environ['SEARCH_ELASTICSEARCH_HOSTS'] if 'SEARCH_ELASTICSEARCH_HOSTS' in os.environ else 'localhost:9200'
     },
 }
 # Application definition
@@ -43,9 +43,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'django_elasticsearch_dsl',
-    'django_tables2'
-#    'django-celery-beat'
+    'django_tables2',
+    'markdownify',
+    'background_task'
 ]
 
 MIDDLEWARE = [
@@ -132,5 +134,47 @@ STATIC_URL = '/static/'
 SEARCH_PACKAGE_FEED_URL='https://pypi.org/rss/packages.xml'
 SEARCH_PACKAGE_INFO_REPO_URL='https://pypi.org/pypi'
 SEARCH_PACKAGE_INFO_FETCH_TIMEOUT=10
-SEARCH_PAGINATION_SIZE=os.environ['SEARCH_PAGINATION_SIZE'] if 'SEARCH_PAGINATION_SIZE' in os.environ else 20
+SEARCH_PACKAGE_LOAD_TIMEOUT=600
+SEARCH_PACKAGE_LOAD_INTERVAL_MINUTES=60
+SEARCH_PAGINATION_SIZE=os.environ['SEARCH_PAGINATION_SIZE'] if 'SEARCH_PAGINATION_SIZE' in os.environ else 25
 SEARCH_ELASTICSEARCH_INDEX_NAME='package_info'
+
+MARKDOWNIFY_STRIP = not DEBUG
+MARKDOWNIFY_BLEACH = False  # disable to turn off sanitaztion of markdown
+MARKDOWNIFY_WHITELIST_TAGS = [
+    'a',
+    'abbr',
+    'acronym',
+    'b',
+    'blockquote',
+    'em',
+    'i',
+    'li',
+    'ol',
+    'p',
+    'strong',
+    'ul',
+    'h1',
+    'h2',
+    'h3',
+    'h4',
+    'img',
+    'code',
+    'pre',
+    'hr'
+]
+MARKDOWNIFY_WHITELIST_ATTRS = [
+    'href',
+    'src',
+    'alt',
+]
+
+MARKDOWNIFY_WHITELIST_STYLES = [
+    'color',
+    'font-weight',
+]
+
+MARKDOWNIFY_WHITELIST_PROTOCOLS = [
+    'http',
+    'https',
+]

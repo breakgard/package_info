@@ -2,3 +2,4 @@
 config.conf
 db.sqlite3
 __pycache__
+migrations

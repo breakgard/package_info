@@ -46,6 +46,7 @@ class PackageInfoManager():
         obj.package_id = str(package_info['_id'])
       except ObjectDoesNotExist:
         obj = PackageInfo(package_id=str(package_info['_id']))
+      obj.description_content_type = str(repo_info['description_content_type'])
       for field in INDEXED_FIELDS:
         setattr(obj, field, str(repo_info[field]))
       obj.save()
@@ -53,16 +54,11 @@ class PackageInfoManager():
 
 class SearchManager():
 
-  def __init__(self, query, sort, page):
+  def __init__(self, query):
     self.query = query
-    self.sort = sort
-    self.page = page
 
   def search(self):
     q = Q("multi_match", query=self.query, fields=INDEXED_FIELDS)
     search_query = PackageInfoDocument.search().query(q)
-    if self.sort is not None:
-      search_query.sort(self.sort)
-    search_query = search_query[(self.page-1)*settings.SEARCH_PAGINATION_SIZE:self.page*settings.SEARCH_PAGINATION_SIZE]
     queryset = search_query.to_queryset()
     return queryset

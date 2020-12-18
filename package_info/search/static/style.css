@@ -1,0 +1,27 @@
+table, th, td {
+  border: 1px solid red;
+}
+
+table {
+  border-collapse:collapse;
+}
+
+th {
+  background-color:yellow;
+  color:black
+}
+
+tr {
+  background-color:#008000;
+  color:white;
+}
+.even {
+  background-color:#009000;
+}
+
+.search-container {
+  border: 1px solid red;
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+}

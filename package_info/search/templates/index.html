@@ -1,15 +1,23 @@
-<div>
- <div>
+{% load static %}
+<html>
+<head>
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+<div class='search-container'>
+ <div class='search-title'>
  <p>PyPi package info search</p>
  </div>
- <div>
+ <div class='search-main'>
    <form action="result" method="get">
        {% csrf_token %}
        {{ form }}
        <input type="submit" value="Submit">
    </form>
  </div>
- <div>
+ <div class='search-footer'>
  <p>You know, for Search!</p>
  </div>
 </div>
+</body>
+</html>
