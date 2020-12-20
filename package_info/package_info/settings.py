@@ -31,7 +31,7 @@ ALLOWED_HOSTS = ast.literal_eval(os.environ['DJANGO_ALLOWED_HOSTS']) if 'DJANGO_
 
 ELASTICSEARCH_DSL = {
     'default': {
-        'hosts': str(os.environ['SEARCH_ELASTICSEARCH_HOSTS']) if 'SEARCH_ELASTICSEARCH_HOSTS' in os.environ else 'localhost:9200'
+        'hosts': os.environ['SEARCH_ELASTICSEARCH_HOSTS'].split(',') if 'SEARCH_ELASTICSEARCH_HOSTS' in os.environ else 'localhost:9200'
     },
 }
 # Application definition
@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.sites',
     'django_elasticsearch_dsl',
     'django_tables2',
     'markdownify',
@@ -86,12 +85,34 @@ WSGI_APPLICATION = 'package_info.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': BASE_DIR / 'db.sqlite3',
+#    }
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': str(os.environ['DJANGO_DB_NAME']) if 'DJANGO_DB_NAME' in os.environ else 'package_info',
+        'USER': str(os.environ['DJANGO_DB_USER']) if 'DJANGO_DB_USER' in os.environ else 'package_info',
+        'PASSWORD':  str(os.environ['DJANGO_DB_PASS']) if 'DJANGO_DB_PASS' in os.environ else 'package_info',
+        'HOST':  str(os.environ['DJANGO_DB_HOST']) if 'DJANGO_DB_HOST' in os.environ else 'localhost',
+        'PORT': str(os.environ['DJANGO_DB_PORT']) if 'DJANGO_DB_PORT' in os.environ else '3306',
+        'OPTIONS': {'charset': 'utf8mb4'},
     }
 }
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': os.environ['DJANGO_LOGGING_LEVEL'] if 'DJANGO_LOGGING_LEVEL' in os.environ else 'INFO',
+    },
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -130,6 +151,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = str(os.environ['DJANGO_STATIC_ROOT']) if 'DJANGO_STATIC_ROOT' in os.environ else '/static'
 
 #Search app config
 SEARCH_PACKAGE_FEED_URL=str(os.environ['SEARCH_PACKAGE_FEED_URL']) if 'SEARCH_PACKAGE_FEED_URL' in os.environ else 'https://pypi.org/rss/packages.xml'
@@ -138,7 +160,7 @@ SEARCH_PACKAGE_INFO_FETCH_TIMEOUT=int(os.environ['SEARCH_PACKAGE_INFO_FETCH_TIME
 SEARCH_PACKAGE_LOAD_TIMEOUT=int(os.environ['SEARCH_PACKAGE_LOAD_TIMEOUT']) if 'SEARCH_PACKAGE_LOAD_TIMEOUT' in os.environ else 600
 SEARCH_PACKAGE_LOAD_INTERVAL_MINUTES=int(os.environ['SEARCH_PACKAGE_LOAD_INTERVAL_MINUTES']) if 'SEARCH_PACKAGE_LOAD_INTERVAL_MINUTES' in os.environ else 60
 SEARCH_MAX_DOCUMENTS_RETURNED=int(os.environ['SEARCH_MAX_DOCUMENTS_RETURNED']) if 'SEARCH_MAX_DOCUMENTS_RETURNED' in os.environ else 1000
-SEARCH_PAGINATION_SIZE=int(os.environ['SEARCH_PAGINATION_SIZE']) if 'SEARCH_PAGINATION_SIZE' in os.environ else 2
+SEARCH_PAGINATION_SIZE=int(os.environ['SEARCH_PAGINATION_SIZE']) if 'SEARCH_PAGINATION_SIZE' in os.environ else 20
 SEARCH_ELASTICSEARCH_INDEX_NAME=str(os.environ['SEARCH_ELASTICSEARCH_INDEX_NAME']) if 'SEARCH_ELASTICSEARCH_INDEX_NAME' in os.environ else 'package_info'
 
 MARKDOWNIFY_STRIP = not DEBUG  # Easy to check what elements were missed in debug
@@ -165,6 +187,7 @@ MARKDOWNIFY_WHITELIST_TAGS = [
     'pre',
     'hr'
 ]
+
 MARKDOWNIFY_WHITELIST_ATTRS = [
     'href',
     'src',

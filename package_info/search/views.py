@@ -7,7 +7,6 @@ from .tables import PackageInfoTable
 from .logic import PackageInfoManager, SearchManager
 from django_tables2 import RequestConfig
 from .tasks import trigger_package_load
-from django.contrib.sites.models import Site
 from django.urls import reverse
 from django.conf import settings
 
