@@ -45,7 +45,7 @@ def schedule_package_load(request):
   trigger_package_load(request.scheme + '://' + request.get_host() + reverse('load_packages'))
   return HttpResponse('Package load scheduled!')
 
-def result_json(request):
+def search_package_info(request):
   if "query" in request.GET:
     manager = SearchManager(request.GET['query'])
     qs = manager.search()

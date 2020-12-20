@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
+import ast
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,16 +22,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '+j3=h0ot$rkx&rjd)7kfg&x-z8rz=#=lo+dqs=f#%pie(=_4w_'
+SECRET_KEY = str(os.environ['DJANGO_SECRET_KEY']) if 'DJANGO_SECRET_KEY' in os.environ else 'PLEASE!change!This_Key_so_its8More=Random-And-Secret$$$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = ast.literal_eval(os.environ['DJANGO_DEBUG']) if 'DJANGO_DEBUG' in os.environ else False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ast.literal_eval(os.environ['DJANGO_ALLOWED_HOSTS']) if 'DJANGO_ALLOWED_HOSTS' in os.environ else []
 
 ELASTICSEARCH_DSL = {
     'default': {
-        'hosts': os.environ['SEARCH_ELASTICSEARCH_HOSTS'] if 'SEARCH_ELASTICSEARCH_HOSTS' in os.environ else 'localhost:9200'
+        'hosts': str(os.environ['SEARCH_ELASTICSEARCH_HOSTS']) if 'SEARCH_ELASTICSEARCH_HOSTS' in os.environ else 'localhost:9200'
     },
 }
 # Application definition
@@ -131,18 +132,17 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 #Search app config
-SEARCH_PACKAGE_FEED_URL='https://pypi.org/rss/packages.xml'
-SEARCH_PACKAGE_INFO_REPO_URL='https://pypi.org/pypi'
-SEARCH_PACKAGE_INFO_FETCH_TIMEOUT=10
-SEARCH_PACKAGE_LOAD_TIMEOUT=600
-SEARCH_PACKAGE_LOAD_INTERVAL_MINUTES=60
-SEARCH_MAX_DOCUMENTS_RETURNED=1000
-SEARCH_PAGINATION_SIZE=os.environ['SEARCH_PAGINATION_SIZE'] if 'SEARCH_PAGINATION_SIZE' in os.environ else 2
+SEARCH_PACKAGE_FEED_URL=str(os.environ['SEARCH_PACKAGE_FEED_URL']) if 'SEARCH_PACKAGE_FEED_URL' in os.environ else 'https://pypi.org/rss/packages.xml'
+SEARCH_PACKAGE_INFO_REPO_URL=str(os.environ['SEARCH_PACKAGE_INFO_REPO_URL']) if 'SEARCH_PACKAGE_INFO_REPO_URL' in os.environ else 'https://pypi.org/pypi'
+SEARCH_PACKAGE_INFO_FETCH_TIMEOUT=int(os.environ['SEARCH_PACKAGE_INFO_FETCH_TIMEOUT']) if 'SEARCH_PACKAGE_INFO_FETCH_TIMEOUT' in os.environ else 10
+SEARCH_PACKAGE_LOAD_TIMEOUT=int(os.environ['SEARCH_PACKAGE_LOAD_TIMEOUT']) if 'SEARCH_PACKAGE_LOAD_TIMEOUT' in os.environ else 600
+SEARCH_PACKAGE_LOAD_INTERVAL_MINUTES=int(os.environ['SEARCH_PACKAGE_LOAD_INTERVAL_MINUTES']) if 'SEARCH_PACKAGE_LOAD_INTERVAL_MINUTES' in os.environ else 60
+SEARCH_MAX_DOCUMENTS_RETURNED=int(os.environ['SEARCH_MAX_DOCUMENTS_RETURNED']) if 'SEARCH_MAX_DOCUMENTS_RETURNED' in os.environ else 1000
+SEARCH_PAGINATION_SIZE=int(os.environ['SEARCH_PAGINATION_SIZE']) if 'SEARCH_PAGINATION_SIZE' in os.environ else 2
+SEARCH_ELASTICSEARCH_INDEX_NAME=str(os.environ['SEARCH_ELASTICSEARCH_INDEX_NAME']) if 'SEARCH_ELASTICSEARCH_INDEX_NAME' in os.environ else 'package_info'
 
-SEARCH_ELASTICSEARCH_INDEX_NAME='package_info'
-
-MARKDOWNIFY_STRIP = not DEBUG
-MARKDOWNIFY_BLEACH = False  # disable to turn off sanitaztion of markdown
+MARKDOWNIFY_STRIP = not DEBUG  # Easy to check what elements were missed in debug
+MARKDOWNIFY_BLEACH = False     # disable to turn off sanitaztion of markdown
 MARKDOWNIFY_WHITELIST_TAGS = [
     'a',
     'abbr',

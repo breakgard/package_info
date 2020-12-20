@@ -2,9 +2,14 @@
 {% load django_tables2 %}
 <html>
 <head>
-  <link rel="stylesheet" href="{% static 'style.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+  <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
 </head>
 <body>
 {% render_table result_table %}
+<br />
+<div>
+  <a href="/">Search again</a>
+</div>
 </body>
 </html>
