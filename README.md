@@ -72,6 +72,6 @@ To launch the periodic gathering of packages, launch the following url after run
 ## To-Do
 
 - Get an improved .css layout
-- Add actual webserver config in docker (nginx)
-- Create a docker-compose and get elasticsearch and mysql into separate containers
+- Add actual webserver config in docker (nginx - most probably wsgi reverse proxy)
+- Create a docker-compose and get elasticsearch, nginx and mysql into separate containers
 - Expand readme - add info on running outside of docker

@@ -33,6 +33,7 @@ then
   echo "CREATE DATABASE $DJANGO_DB_NAME" | /usr/bin/mysql
   echo "CREATE USER $DJANGO_DB_USER@'localhost' IDENTIFIED BY '$DJANGO_DB_PASS'" | /usr/bin/mysql
   echo "GRANT ALL PRIVILEGES ON $DJANGO_DB_NAME.* TO $DJANGO_DB_USER@'localhost'" | /usr/bin/mysql
+  /app/venv/bin/python3 manage.py makemigrations
   /app/venv/bin/python3 manage.py migrate
   /app/venv/bin/python3 manage.py search_index --rebuild -f
 fi
